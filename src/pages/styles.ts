@@ -23,6 +23,12 @@ export const StyledTitle = styled.h1`
   fontweight: 'bold';
 `;
 
+export const StyledStepTitle = styled.h3`
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+`;
+
 export const StyledErrorText = styled.p`
   color: #ff008d;
 `;
@@ -44,7 +50,7 @@ export const StyledTextLabel = styled.strong`
 export const StyledButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin: 20px;
 `;
 
 export const StyledButtonLabel = styled.div`

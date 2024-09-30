@@ -22,10 +22,14 @@ const antIcon = <LoadingOutlined style={{ fontSize: 24, color: '#fff' }} />;
 
 /**
  * Component to handle Ethereum transactions via MetaMask.
- * Allows users to sign a transaction by connecting to MetaMask,
- * switching networks if necessary, and then executing a transaction.
  *
- * @returns {JSX.Element} The UI component with transaction details and actions.
+ * This component allows users to sign a transaction by:
+ * 1. Checking for MetaMask installation.
+ * 2. Switching to a specific network if needed.
+ * 3. Executing the transaction and handling its result.
+ *
+ * @component
+ * @returns {JSX.Element} The UI component rendering transaction details, error handling, and action buttons.
  */
 export default function SignTransaction() {
   const { transactionDetails, error, setError, isProcessing } = useTransactionDetails();
@@ -33,11 +37,18 @@ export default function SignTransaction() {
   const [txHash, setTxHash] = useState<string | null>(null);
 
   /**
-   * Initiates the transaction signing process by checking for MetaMask,
-   * setting the network, and sending the transaction.
-   * Updates the component state based on the outcome of these operations.
+   * Initiates the transaction signing process.
+   *
+   * This function performs the following:
+   * 1. Checks if MetaMask is installed.
+   * 2. Switches to the correct network based on the transaction details.
+   * 3. Sends a transaction using ethers.js and waits for it to be mined.
+   *
+   * @async
+   * @function signTransaction
+   * @returns {Promise<void>} Updates the state of the component based on the result of the transaction.
    */
-  const signTransaction = async () => {
+  const signTransaction = async (): Promise<void> => {
     if (!window.ethereum) {
       setError('MetaMask is not installed. Please install MetaMask to proceed.');
       return;
@@ -60,7 +71,7 @@ export default function SignTransaction() {
       console.log(`Connected account: ${address}`);
 
       const transaction = {
-        to: transactionDetails.toAddress,
+        to: transactionDetails.to,
         value: ethers.parseEther(transactionDetails.amount.toString()),
         currency: transactionDetails.currency,
       };
