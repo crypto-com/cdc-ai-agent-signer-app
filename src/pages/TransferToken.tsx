@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import logo from '../assets/logo.svg';
 import Button from '../components/Button';
@@ -17,6 +17,7 @@ import { TransactionDetails } from '../components/TransactionDetails';
 import { switchToCustomNetwork } from '../utils/switchNetworks';
 import { useTransactionDetails } from '../hooks/useTransactionDetails';
 import { Alert } from '../components/Alert';
+import { erc20Abi } from '../constants/abi.constants';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24, color: '#fff' }} />;
 
@@ -31,11 +32,13 @@ const antIcon = <LoadingOutlined style={{ fontSize: 24, color: '#fff' }} />;
  * @component
  * @returns {JSX.Element} The UI component rendering transaction details, error handling, and action buttons.
  */
-export default function SignTransaction() {
+export default function TransferToken() {
   const { transactionDetails, error, setError, isProcessing } = useTransactionDetails();
   const [isSigning, setIsSigning] = useState<boolean>(false);
   const [txHash, setTxHash] = useState<string | null>(null);
-
+  useEffect(() => {
+    console.log(transactionDetails);
+  }, [transactionDetails]);
   /**
    * Initiates the transaction signing process.
    *
@@ -70,15 +73,24 @@ export default function SignTransaction() {
       const address = await signer.getAddress();
       console.log(`Connected account: ${address}`);
 
-      const transaction = {
-        to: transactionDetails.to,
-        value: ethers.parseEther(transactionDetails.amount.toString()),
-        currency: transactionDetails.currency,
-      };
+      if (transactionDetails.contractAddress) {
+        const contract = new ethers.Contract(transactionDetails.contractAddress, erc20Abi, signer);
+        const txResponse = await contract.transfer(
+          transactionDetails.to,
+          ethers.parseUnits(transactionDetails.amount.toString(), 18)
+        );
+        setTxHash(txResponse.hash);
+        await txResponse.wait();
+      } else {
+        const transaction = {
+          to: transactionDetails.to,
+          value: ethers.parseEther(transactionDetails.amount.toString()),
+        };
 
-      const txResponse = await signer.sendTransaction(transaction);
-      setTxHash(txResponse.hash);
-      await txResponse.wait();
+        const txResponse = await signer.sendTransaction(transaction);
+        setTxHash(txResponse.hash);
+        await txResponse.wait();
+      }
     } catch (e) {
       const error = e as Error;
       console.error('Transaction failed:', e);

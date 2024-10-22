@@ -26,6 +26,9 @@ export interface DecodedToken {
   from: string;
   to: string;
   amount: number;
+  contractAddress: string;
+  fromContractAddress: string;
+  toContractAddress: string;
   currency: string;
   chain: ChainOptions;
   exp: number;
@@ -71,6 +74,7 @@ export enum TransactionAction {
 export interface ChainOptions {
   id: number;
   name: string;
+  explorerUrl: string;
   rpc: string;
 }
 
