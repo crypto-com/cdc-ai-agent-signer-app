@@ -32,7 +32,7 @@ export const useWrapToken = (): UseWrapToken => {
     try {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
-      const contractAddress = wrappedZkcroAddress;
+      const contractAddress = transactionDetails.fromContractAddress;
       const amount = transactionDetails.action[0].amount.toString();
       const wrappedZkCROContract = new ethers.Contract(contractAddress, erc20Abi, signer);
 

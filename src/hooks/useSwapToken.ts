@@ -35,7 +35,7 @@ export const useSwapToken = (): UseSwapToken => {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const from = await signer.getAddress();
-      const wrappedZkCROContract = new ethers.Contract(wrappedZkcroAddress, erc20Abi, signer);
+      const wrappedZkCROContract = new ethers.Contract(transactionDetails.fromContractAddress, erc20Abi, signer);
       const amountInWei = ethers.parseEther(transactionDetails.action[0].amount.toString());
       const allowance = await wrappedZkCROContract.allowance(from, routerAddress);
 
@@ -87,7 +87,7 @@ export const useSwapToken = (): UseSwapToken => {
       const swapTx = await routerContract.swapExactTokensForTokens(
         amountInWei,
         amountOutMinWei,
-        [wrappedZkcroAddress, tokenAddress],
+        [transactionDetails.fromContractAddress, transactionDetails.toContractAddress],
         from,
         {
           gasLimit: 1000000,
