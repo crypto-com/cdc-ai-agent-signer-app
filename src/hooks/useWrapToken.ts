@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { ethers } from 'ethers';
-import { erc20Abi } from '../constants/abi.constants';
+import { useState } from 'react';
+import { ABI_MAPPING } from '../constants/abi.constants';
+import { WRAPPED_ADDRESS_MAPPING } from '../constants/global.constants';
 import { DecodedToken, UseWrapToken } from '../types/global.interfaces';
-import { wrappedZkcroAddress } from '../constants/global.constants';
 
 /**
  * Custom hook for handling zkCRO -> Wrapped zkCRO deposit transactions.
@@ -32,11 +32,14 @@ export const useWrapToken = (): UseWrapToken => {
     try {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
-      const contractAddress = transactionDetails.fromContractAddress;
       const amount = transactionDetails.action[0].amount.toString();
-      const wrappedZkCROContract = new ethers.Contract(contractAddress, erc20Abi, signer);
+      const wrappedTokenContract = new ethers.Contract(
+        WRAPPED_ADDRESS_MAPPING[transactionDetails.chain.id],
+        ABI_MAPPING[transactionDetails.chain.id],
+        signer
+      );
 
-      const txResponse = await wrappedZkCROContract.deposit({
+      const txResponse = await wrappedTokenContract.deposit({
         value: ethers.parseEther(amount),
         gasLimit: 200000,
       });
