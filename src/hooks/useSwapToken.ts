@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { ethers } from 'ethers';
+import { useState } from 'react';
 import { erc20Abi, routerAbi } from '../constants/abi.constants';
+import { ROUTER_MAPPING } from '../constants/global.constants';
 import { DecodedToken, UseSwapToken } from '../types/global.interfaces';
-import { routerAddress, tokenAddress, wrappedZkcroAddress } from '../constants/global.constants';
 
 /**
  * Custom hook for handling approval and swap transactions for Wrapped zkCRO to VUSD.
@@ -37,10 +37,10 @@ export const useSwapToken = (): UseSwapToken => {
       const from = await signer.getAddress();
       const wrappedZkCROContract = new ethers.Contract(transactionDetails.fromContractAddress, erc20Abi, signer);
       const amountInWei = ethers.parseEther(transactionDetails.action[0].amount.toString());
-      const allowance = await wrappedZkCROContract.allowance(from, routerAddress);
+      const allowance = await wrappedZkCROContract.allowance(from, ROUTER_MAPPING[transactionDetails.chain.id]);
 
       if (allowance < amountInWei) {
-        const approveTx = await wrappedZkCROContract.approve(routerAddress, amountInWei, {
+        const approveTx = await wrappedZkCROContract.approve(ROUTER_MAPPING[transactionDetails.chain.id], amountInWei, {
           gasLimit: 200000,
           gasPrice: ethers.parseUnits('5000', 'gwei'),
         });
@@ -80,7 +80,7 @@ export const useSwapToken = (): UseSwapToken => {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const from = await signer.getAddress();
-      const routerContract = new ethers.Contract(routerAddress, routerAbi, signer);
+      const routerContract = new ethers.Contract(ROUTER_MAPPING[transactionDetails.chain.id], routerAbi, signer);
       const amountInWei = ethers.parseEther(transactionDetails.action[0].amount.toString());
       const amountOutMinWei = ethers.parseEther(amountOutMin);
 
