@@ -5,7 +5,7 @@ import { ROUTER_MAPPING } from '../constants/global.constants';
 import { DecodedToken, UseSwapToken } from '../types/global.interfaces';
 
 /**
- * Custom hook for handling approval and swap transactions for Wrapped zkCRO to VUSD.
+ * Custom hook for handling approval and swap transactions.
  *
  * @returns {Object} An object containing functions and state for handling token approval and swapping.
  */
@@ -61,7 +61,7 @@ export const useSwapToken = (): UseSwapToken => {
   };
 
   /**
-   * Swaps Wrapped zkCRO for VUSD tokens using the router contract.
+   * Swaps `fromContractAddress` for `toContractAddress`.
    *
    * @param {DecodedToken} transactionDetails - Decoded JWT token containing transaction details.
    * @param {string} amountOutMin - Minimum amount of tokens to receive from the swap.

@@ -20,17 +20,24 @@ export function TransactionDetails({ transactionDetails }: TransactionDetailsPro
         <StyledTextLabel>Recipient Address:</StyledTextLabel> {transactionDetails.to}
       </StyledText>
       {transactionDetails.contractAddress ? (
-        <StyledText>
-          <StyledTextLabel>Currency:</StyledTextLabel> {transactionDetails.contractAddress} {toTokenInfo.symbol}
-        </StyledText>
+        <>
+          <StyledText>
+            <StyledTextLabel>Currency:</StyledTextLabel> {transactionDetails.contractAddress} {toTokenInfo.symbol}
+          </StyledText>
+          <StyledText>
+            <StyledTextLabel>Transfer Amount:</StyledTextLabel> {transactionDetails.amount} {toTokenInfo.symbol}
+          </StyledText>
+        </>
       ) : (
-        <StyledText>
-          <StyledTextLabel>Currency:</StyledTextLabel> Native Token ({nativeTokenSymbol})
-        </StyledText>
+        <>
+          <StyledText>
+            <StyledTextLabel>Currency:</StyledTextLabel> Native Token ({nativeTokenSymbol})
+          </StyledText>
+          <StyledText>
+            <StyledTextLabel>Transfer Amount:</StyledTextLabel> {transactionDetails.amount} {nativeTokenSymbol}
+          </StyledText>
+        </>
       )}
-      <StyledText>
-        <StyledTextLabel>Transfer Amount:</StyledTextLabel> {transactionDetails.amount} {toTokenInfo.symbol}
-      </StyledText>
     </StyledGrid>
   );
 }

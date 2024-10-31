@@ -99,7 +99,7 @@ export interface UseTransactionDetails {
  * state and functions needed to manage token approval and swap transactions.
  *
  * @param approveRouter - A function to approve the router to spend Wrapped zkCRO tokens.
- * @param swapTokens - A function to swap Wrapped zkCRO for VUSD tokens.
+ * @param swapTokens - A function to swap tokens.
  * @param isApproving - A boolean indicating whether the approval transaction is being processed.
  * @param isApproved - A boolean indicating whether the router has been approved.
  * @param isSwapping - A boolean indicating whether the swap transaction is being processed.
